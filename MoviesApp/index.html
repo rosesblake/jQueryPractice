@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <label
+        >Title
+        <input type="text" id="title" />
+      </label>
+      <label
+        >Rating
+        <input type="text" id="rating" />
+      </label>
+      <button type="submit" id="button">Submit</button>
+      <br />
+      <button type="button" id="sortTitle">Sort by Title</button>
+      <button type="button" id="sortRating">Sort by Rating</button>
+      <ul></ul>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+      $("form").on("click", "#button", function (e) {
+        e.preventDefault();
+        const $val1 = $("#title").val();
+        const $val2 = $("#rating").val();
+        const $button = $("<button>Remove</button>").addClass("remove");
+        if ($val2 <= 10 && $val2 >= 0 && $val1.length >= 2) {
+          $("ul")
+            .append(`<li>Title: ${$val1} Rating: ${$val2}</li>`)
+            .append($button);
+        } else alert("Please Enter more than two characters and a rating between 0-10");
+      });
+
+      $("ul").on("click", ".remove", function (e) {
+        e.preventDefault();
+        $(this).parent().remove();
+      });
+
+      $("#sortTitle").on("click", function () {
+        const $list = $("ul");
+        const $listItems = $list.children("li").get();
+        $listItems.sort(function (a, b) {
+          const titleA = $(a).text().toUpperCase();
+          const titleB = $(b).text().toUpperCase();
+          return titleA < titleB ? -1 : titleA > titleB ? 1 : 0;
+        });
+        $list.empty().append($listItems);
+      });
+
+      $("#sortRating").on("click", function () {
+        const $list = $("ul");
+        const $listItems = $list.children("li").get();
+        $listItems.sort(function (a, b) {
+          const ratingA = parseFloat(
+            $(a)
+              .text()
+              .match(/Rating: (\d+)/)[1]
+          );
+          const ratingB = parseFloat(
+            $(b)
+              .text()
+              .match(/Rating: (\d+)/)[1]
+          );
+          return ratingA - ratingB;
+        });
+        $list.empty().append($listItems);
+      });
+
+      //brother helped me with the sorting because that was a little out of my current realm of knowledge
+    </script>
+  </body>
+</html>
